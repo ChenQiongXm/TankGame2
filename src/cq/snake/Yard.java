@@ -111,9 +111,8 @@ public class Yard extends JFrame {
 		}
 		
 	}
+	@SuppressWarnings("unused")
 	private  class KeyMonitor extends KeyAdapter{
-		
-
 		@Override
 		public void keyPressed(KeyEvent e) {
 			// TODO Auto-generated method stub
