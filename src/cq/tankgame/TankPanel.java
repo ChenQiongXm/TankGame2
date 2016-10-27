@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 
 class TankPanel extends JPanel implements Runnable ,KeyListener{
 	private static final long serialVersionUID = 1L;
-	private Hero hero=new Hero(150,50,Dir.UP);
 	private LinkedList<Enemy>enemies;
+	private Hero hero;
 	private Iterator<Enemy>enemyIterator;
 	private LinkedList<IronWall> ironWalls;
 	private Iterator<IronWall> iroIterator;
@@ -21,12 +21,15 @@ class TankPanel extends JPanel implements Runnable ,KeyListener{
 	private Manager manager;
 	public TankPanel() {
 		// TODO Auto-generated constructor stub
+		hero=new Hero(150,50,Dir.UP);
+		new Thread(hero).start();
 		this.setSize(600,500);
 		enemies=new LinkedList<Enemy>();
 		ironWalls=new LinkedList<IronWall>();
 		woodWalls=new LinkedList<WoodWall>();
 		manager=new Manager(hero, enemies,ironWalls);
-		for (int i = 0; i < 10; i++) {
+		hero.setManager(manager);
+		for (int i = 0; i < 1; i++) {
 			Enemy enemy = new Enemy(50+i*70,400,manager);
 			new Thread(enemy).start();
 			enemies.add(enemy);
@@ -92,12 +95,12 @@ class TankPanel extends JPanel implements Runnable ,KeyListener{
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
 		manager.checkCollidWalls(hero);
-		System.out.println(manager.checkCollidEnemies(hero));
 		hero.keyDeal(e.getKeyCode());
 	}
 	@Override
 	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub	
+		hero.keyRel(e.getKeyCode());
 	}
 	
 }
