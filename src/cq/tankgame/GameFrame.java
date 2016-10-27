@@ -1,17 +1,16 @@
 package cq.tankgame;
 
-import java.awt.Color;
 import java.awt.EventQueue;
-import java.awt.Graphics;
 import java.awt.event.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 import javax.swing.*;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 
-
+/**
+ * 游戏界面
+ * @author chenq
+ *
+ */
 public class GameFrame extends JFrame {
 	private TankPanel panel;
 	private JMenuBar menuBar;
@@ -24,6 +23,7 @@ public class GameFrame extends JFrame {
 			}
 		});
 	}
+	//初始化界面
 	public GameFrame() {
 		// TODO Auto-generated constructor stub
 		panel=new TankPanel();
@@ -75,82 +75,3 @@ public class GameFrame extends JFrame {
 	}
 }
  
-
-class TankPanel extends JPanel implements Runnable ,KeyListener{
-	private static final long serialVersionUID = 1L;
-	private Hero hero=new Hero(150,50,Dir.UP);
-	private LinkedList<Enemy>enemies;
-	private Manager manager;
-	public TankPanel() {
-		// TODO Auto-generated constructor stub
-		this.setSize(600,500);
-		enemies=new LinkedList<Enemy>();
-		manager=new Manager(hero, enemies);
-		for (int i = 0; i < 10; i++) {
-			Enemy enemy = new Enemy(50+i*70,400,manager);
-			new Thread(enemy).start();
-			enemies.add(enemy);
-		}
-	}
-	@Override
-	public void paint(Graphics g) {
-		// TODO Auto-generated method stub
-		super.paint(g);
-		Color c=g.getColor();
-		g.setColor(Color.YELLOW);
-		g.fillRect(40,40, 720, 520);
-		g.setColor(Color.black);
-		g.fillRect(50,50,700, 500);
-		g.setColor(c);
-		hero.draw(g);
-		for (Enemy enemy : enemies) {
-			enemy.draw(g);
-		}
-	}
-	public void run() {
-		while(true){
-			try {
-				Thread.sleep(50);
-				repaint();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub	
-	}
-	@Override
-	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-		if(e.getKeyCode()==KeyEvent.VK_W)
-		{
-			hero.setDir(Dir.UP);
-			hero.move();
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_D)
-		{
-			//向右前进
-			hero.setDir(Dir.RIGHT);
-			hero.move();
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_S)
-		{
-			//向下前进
-			hero.setDir(Dir.DOWN);
-			hero.move();
-		}
-		else if(e.getKeyCode()==KeyEvent.VK_A)
-		{//向左前进
-			hero.setDir(Dir.LEFT);
-			hero.move();
-		}
-	}
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub		
-	}
-	
-}

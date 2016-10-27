@@ -1,19 +1,25 @@
 package cq.tankgame;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.util.Iterator;
+import java.util.LinkedList;
 
 import javax.swing.ImageIcon;
 
 public class Tank {
 	protected int x;
 	protected int y;
-	protected int speed=10;
+	int speed=10;
 	protected Dir direction;
 	protected ImageIcon body;
+	protected LinkedList<Shot> shots;
 	protected boolean isAlive=true;
+	boolean isCollided=false;
 	public Tank(int x,int y){
 		this.x=x;
 		this.y=y;
+		shots=new LinkedList<Shot>();
 	}
 	public Tank(int x,int y,Dir direction) {
 		// TODO Auto-generated constructor stub
@@ -21,10 +27,18 @@ public class Tank {
 		this.y=y;
 		this.direction=direction;
 		this.body=direction.getBody();
+		shots=new LinkedList<Shot>();
 	}
 	public void draw(Graphics g){
 		this.body=direction.getBody();
 		g.drawImage(body.getImage(),x,y,null);
+		Iterator<Shot>iterator=shots.iterator();
+			while(iterator.hasNext()) {
+				Shot shot=iterator.next();
+				if(!shot.isAlive)
+					iterator.remove();
+				else shot.draw(g);
+			}
 	}
 	public void setDir(Dir direction) {
 		this.direction = direction;
@@ -54,16 +68,50 @@ class Hero extends Tank{
 		super(x, y, direction);
 		// TODO Auto-generated constructor stub
 	}
+
+	public void keyDeal(int keyCode) {
+		// TODO Auto-generated method stub
+		if(keyCode==KeyEvent.VK_W)
+		{
+			if(direction!=Dir.UP)setDir(Dir.UP);
+			else if(!isCollided)move();
+			else isCollided=false;
+		}
+		else if(keyCode==KeyEvent.VK_D)
+		{
+			//向右前进
+			if(direction!=Dir.RIGHT)setDir(Dir.RIGHT);
+			else if(!isCollided)move();
+			else isCollided=false;
+		}
+		else if(keyCode==KeyEvent.VK_S)
+		{
+			//向下前进
+			if(direction!=Dir.DOWN)setDir(Dir.DOWN);
+			else if(!isCollided)move();
+			else isCollided=false;
+		}
+		else if(keyCode==KeyEvent.VK_A)
+		{//向左前进
+			if(direction!=Dir.LEFT)setDir(Dir.LEFT);
+			else if(!isCollided)move();
+			else isCollided=false;
+		}else if(keyCode==KeyEvent.VK_J){
+			Shot shot=new Shot(x, y, direction);
+			shots.add(shot);
+			new Thread(shot).start();
+		}
+	}
 }
 class Enemy extends Tank implements Runnable{
 	private int time=10;
-	boolean isCollided=false;
 	private Manager manager;
 	public Enemy(int x,int y,Manager manager) {
 		// TODO Auto-generated constructor stub
 		super(x, y);
 		this.direction=getRandom();
-		this.speed=2;
+		this.body=direction.getBody();
+		this.speed=4;
 		this.manager=manager;
 	}
 	public Enemy(int x, int y, Dir direction) {
@@ -78,12 +126,13 @@ class Enemy extends Tank implements Runnable{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			manager.checkCollid(this);
+			manager.checkEnemyCollid(this);
 			if(!isCollided) move();
+			else time=0;
 			if(time==0){
 				this.setDir(getRandom());
 				isCollided=false;
-				time=(int)(Math.random()*10)+20;
+				time=(int)(Math.random()*20)+20;
 			}
 			time--;
 		}
