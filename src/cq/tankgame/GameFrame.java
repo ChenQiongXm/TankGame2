@@ -28,8 +28,7 @@ public class GameFrame extends JFrame {
 		// TODO Auto-generated constructor stub
 		panel=new TankPanel();
 		menuBar=new JMenuBar();
-		//游戏菜单
-		
+		//游戏菜单		
 		JMenu game=new JMenu("游戏");
 		JMenuItem gameStart=game.add(new JMenuItem("开始游戏"));
 		JMenuItem gamePause=game.add(new JMenuItem("暂停游戏"));

@@ -2,13 +2,15 @@ package cq.tankgame;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.Serializable;
 
 /**
  * 坦克大战里的墙。
  * @author chenq
  *
  */
-public class Wall {
+public class Wall implements Serializable{
+	private static final long serialVersionUID = 1L;
 	int x;
 	int y;
 	Color c;
@@ -34,21 +36,5 @@ public class Wall {
 		g.fill3DRect(x, y+height, width, height,true);
 		g.fill3DRect(x+width, y+height, width, height,true);
 		g.setColor(c1);
-	}
-}
-class WoodWall extends Wall{
-
-	public WoodWall(int x, int y) {
-		super(x, y);
-		this.c=Color.yellow ;
-	}
-
-	
-}
-class IronWall extends Wall{
-
-	public IronWall(int x, int y) {
-		super(x, y);
-		this.c=Color.white;
 	}
 }

@@ -1,8 +1,14 @@
 package cq.tankgame;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
-public class Manager {
+import cq.tankgame.client.Hero;
+import cq.tankgame.server.Enemy;
+
+public class Manager implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	private Hero hero;
 	private LinkedList<IronWall>ironWalls;
 	private LinkedList<Enemy> enemies;

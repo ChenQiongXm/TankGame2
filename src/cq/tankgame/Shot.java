@@ -1,14 +1,15 @@
 package cq.tankgame;
 
 import java.awt.Graphics;
+import java.io.Serializable;
 
 import javax.swing.ImageIcon;
 
-public class Shot implements Runnable{
-	int x;
-	int y;
-	int speed=5;
-	Dir direction;
+public class Shot implements Runnable,Serializable{
+	public int x;
+	public int y;
+	public int speed=5;
+	public Dir direction;
 	boolean isAlive=true;
 	ImageIcon shotBody;
 	public Shot(int x, int y,Dir dir) {
